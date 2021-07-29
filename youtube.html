@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Youtube</title>
+    <link href="youtube.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+</head>
+<body>
+    <div id="navbar">
+        <span id="menu" class="material-icons">menu</span>
+        <div id="icon"><img src="https://th.bing.com/th/id/OIP.wkj8E9qEhcwtnURVizJWwgHaEK?pid=ImgDet&rs=1" /></div>
+        <div id="searchbar"><input id="query" type="text" placeholder="Search" /><span onclick="callApi()" class="material-icons">search</span><span class="material-icons">mic</span></div>
+        <div id="option"><span class="material-icons">apps</span><span class="material-icons">more_vert</span><button><span class="material-icons">account_circle</span><span>SIGN IN</span></button></div>
+    </div>
+    <div class="home">
+        <div id="dashboard">
+            <span class="material-icons">home<div></div></span>
+            <span class="material-icons">explore<div></div></span>
+            <span class="material-icons">subscriptions<div></div></span>
+            <span class="material-icons">video_library<div></div></span>
+            <span class="material-icons">history<div></div></span>
+        </div>
+
+        <div id="main_div">
+            <div id="videos"></div>
+        </div>
+    </div>
+</body>
+</html>
+<script>
+
+    let videos_div = document.getElementById("videos");
+
+
+    async function callApi() {
+
+        videos_div.innerHTML = null;
+
+        let s = document.getElementById("query").value;
+
+        let res = await fetch(`https://youtube.googleapis.com/youtube/v3/search?q=${s}&key=AIzaSyCHF9iaGvfwMLeTC0nJjzIsrNF2enASxQ0&maxResults=20`);
+
+        let data = await res.json();
+        console.log("data:", data);
+
+        let { items } = data;
+
+        items = items.filter((el) => {
+            return el.id.videoId != undefined;
+        })
+
+        items.forEach(({id:{videoId}}) => {
+
+            let div = document.createElement("div");
+
+            div.style.marginTop = "20px";
+
+            div.innerHTML = `<iframe width="420" height="260" src="https://www.youtube.com/embed/${videoId}" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`
+
+            videos_div.append(div);
+        });
+    }
+
+    
+</script>
