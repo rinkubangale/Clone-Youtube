@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Youtube</title>
+    <title>Youtube Search</title>
     <link href="youtube.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 </head>
@@ -41,7 +41,7 @@
 
         let s = document.getElementById("query").value;
 
-        let res = await fetch(`https://youtube.googleapis.com/youtube/v3/search?q=${s}&key=AIzaSyCHF9iaGvfwMLeTC0nJjzIsrNF2enASxQ0&maxResults=20`);
+        let res = await fetch(`https://youtube.googleapis.com/youtube/v3/search?part=snippet&q=${s}&key=AIzaSyBv56Uyk7HsRZMVSOM8UUHbyAShlylxjbo&maxResults=10`);
 
         let data = await res.json();
         console.log("data:", data);
@@ -52,13 +52,13 @@
             return el.id.videoId != undefined;
         })
 
-        items.forEach(({id:{videoId}}) => {
+        items.forEach(({id:{videoId}, snippet: { title, channelTitle }}) => {
 
             let div = document.createElement("div");
 
             div.style.marginTop = "20px";
 
-            div.innerHTML = `<iframe width="420" height="260" src="https://www.youtube.com/embed/${videoId}" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`
+            div.innerHTML = `<iframe width="420" height="260" src="https://www.youtube.com/embed/${videoId}" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe><span><h4>${title}</h4><br><p style="margin-top: -30px">${channelTitle}</p></span>`
 
             videos_div.append(div);
         });

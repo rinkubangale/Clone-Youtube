@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Youtube Home</title>
     <link href="youtube.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 </head>
@@ -12,14 +12,14 @@
     <div id="navbar">
         <span id="menu" class="material-icons">menu</span>
         <div id="icon"><img src="https://th.bing.com/th/id/OIP.wkj8E9qEhcwtnURVizJWwgHaEK?pid=ImgDet&rs=1" /></div>
-        <div id="searchbar"><input id="query" type="text" placeholder="Search" /><span onclick="callApi()"
+        <div id="searchbar"><input onclick="home()" id="query" type="text" placeholder="Search" /><span onclick="callApi()"
                 class="material-icons">search</span><span class="material-icons">mic</span></div>
         <div id="option"><span class="material-icons">apps</span><span class="material-icons">more_vert</span><button><span
                     class="material-icons">account_circle</span><span>SIGN IN</span></button></div>
     </div>
     <div class="home">
         <div id="dashboard">
-            <span class="material-icons">home<div></div></span>
+            <span class="material-icons" style="color: red;">home<div></div></span>
             <span class="material-icons">explore<div></div></span>
             <span class="material-icons">subscriptions<div></div></span>
             <span class="material-icons">video_library<div></div></span>
@@ -29,6 +29,7 @@
         <div id="main_div">
             <div id="videos"></div>
         </div>
+        
     </div>
 </body>
 </html>
@@ -43,7 +44,7 @@
 
         let s = document.getElementById("query").value;
 
-        let res = await fetch(`https://youtube.googleapis.com/youtube/v3/search?part=snippet&location=23.406012%2C%2079.45809&locationRadius=621mi&q=surfing&type=video&key=AIzaSyCWwdF00cl4UyZGNJKVDQDqBzsxb_mY9CA&maxResults=20`);
+        let res = await fetch(`https://youtube.googleapis.com/youtube/v3/search?part=snippet&location=23.406012%2C%2079.45809&locationRadius=621mi&q=trending&type=video&key=AIzaSyBv56Uyk7HsRZMVSOM8UUHbyAShlylxjbo&maxResults=10`);
 
         let data = await res.json();
         console.log("data:", data);
@@ -54,13 +55,13 @@
             return el.id.videoId != undefined;
         })
 
-        items.forEach(({ id: { videoId } }) => {
+        items.forEach(({ id: { videoId }, snippet: {title, channelTitle} }) => {
 
             let div = document.createElement("div");
 
             div.style.marginTop = "20px";
 
-            div.innerHTML = `<iframe width="320" height="200" src="https://www.youtube.com/embed/${videoId}" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`
+            div.innerHTML = `<iframe width="320" height="200" src="https://www.youtube.com/embed/${videoId}" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe><br><div><h4>${title}</h4><br><p style="margin-top: -30px">${channelTitle}</p></div>`
 
             videos_div.append(div);
         });
@@ -73,6 +74,8 @@
 
     callApi();
 
-
+    let home = () => {
+            window.location.href = "youtube.html";
+        }
 
 </script>
